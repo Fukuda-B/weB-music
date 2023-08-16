@@ -6,14 +6,20 @@
     <title>weB-music</title>
 </head>
 <body>
-    <button type="button" id="start">start</button>
-
     <select id="freq_type">
-        <option value="sine">正弦波</option>
-        <option value="square">矩形波</option>
-        <option value="sawtooth">のこぎり波</option>
-        <option value="triangle">三角波</option>
+        <option value="sine">Sine</option>
+        <option value="square">Square</option>
+        <option value="sawtooth">Sawtooth</option>
+        <option value="triangle">Triangle</option>
     </select>
+
+    <p><input type="range" id="volume" min="0" max="100" step="1" value="30">
+        音量: <span id="current_volume"></span></p>
+
+    <p><input type="range" id="tone_length" min="0" max="3000" step="1" value="300">
+        長さ: <span id="current_tone_length"></span></p>
+
+
 </body>
 <script src="main.js"></script>
 </html>
