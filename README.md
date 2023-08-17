@@ -9,10 +9,10 @@ Web Audio API で波形を作り，再生する．
 
 デモ Preset1 (音が出ます)
 
-<div><video controls src="https://github.com/Fukuda-B/weB-music/assets/60131202/edeb82af-1fd5-4638-8855-77ffe3358250" muted="false"></video></div>
+<div><video controls src="https://github.com/Fukuda-B/weB-music/assets/60131202/a4c9f15f-f42e-4acc-93b6-5523a1e90281" muted="false"></video></div>
 
 デモ2 Custom (音が出ます)
 
-<div><video controls src="https://github.com/Fukuda-B/weB-music/assets/60131202/e83ef22d-b8fc-4de6-b009-b8d5c4c2518b" muted="false"></video></div>
+<div><video controls src="https://github.com/Fukuda-B/weB-music/assets/60131202/11147082-0c74-46b0-8a80-2dd7e8d1ccb9" muted="false"></video></div>
 
 デモのために少しタイピングの練習をしました．
