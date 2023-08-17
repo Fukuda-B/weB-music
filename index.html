@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <meta name="keywords" content="piano,browser,web,ブラウザ,ピアノ,ウェブ">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>weB-music</title>
 </head>
 <body>
+    <h3>weB-music</h3>
     <select id="freq_type">
         <option value="sine">Sine</option>
         <option value="square">Square</option>
@@ -14,12 +16,39 @@
     </select>
 
     <p><input type="range" id="volume" min="0" max="100" step="1" value="30">
-        音量: <span id="current_volume"></span></p>
+        Volume: <span id="current_volume"></span></p>
 
-    <p><input type="range" id="tone_length" min="0" max="3000" step="1" value="300">
-        長さ: <span id="current_tone_length"></span></p>
+    <p><input type="range" id="tone_attack" min="1" max="2000" step="1" value="5">
+        Attack: <span id="current_tone_attack"></span>ms</p>
 
+    <p><input type="range" id="tone_hold" min="1" max="2000" step="1" value="5">
+        Hold: <span id="current_tone_hold"></span>ms</p>
 
+    <p><input type="range" id="tone_decay" min="1" max="2000" step="1" value="30">
+        Decay: <span id="current_tone_decay"></span>ms</p>
+
+    <p><input type="range" id="tone_sustain" min="0" max="100" step="1" value="80">
+        Sustain: <span id="current_tone_sustain"></span></p>
+
+    <p><input type="range" id="tone_release" min="1" max="2000" step="1" value="200">
+        Release: <span id="current_tone_release"></span>ms</p>
+
+    <button type="button" id="pre1">Preset1</button>
+    <button type="button" id="pre2">Preset2</button>
+    <button type="button" id="pre3">Preset3</button>
+
+    <br>
+    <select id="key_map" style="margin-top: 20px;">
+        <option value="keymap1">Keymap1</option>
+        <option value="keymap2">Keymap2</option>
+        <!-- <option value="keymap3">Keymap3</option> -->
+    </select>
+
+    <p>
+        注意点<br>
+        音の数×Volume>100 で音割れするので，音量(Volume)は小さめのほうがいいかもしれません．<br>
+        Releaseを0にすると，クリックノイズの原因になるため最小を1msにしています (Decayも同様)．<br>
+    </p>
 </body>
 <script src="main.js"></script>
 </html>
