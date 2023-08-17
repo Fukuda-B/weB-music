@@ -8,8 +8,8 @@ Web Audio API で波形を作り，再生する．
 -----
 デモ Preset1 (音が出ます)
 
-<div><video controls src="./src/2023-08-17 16-44-41_c.mp4" muted="false"></video></div>
+<div><video controls src="./src/demo1.mp4" muted="false"></video></div>
 
 デモ2 Custom (音が出ます)
 
-<div><video controls src="./src/2023-08-17 17-12-56_c.mp4" muted="false"></video></div>
+<div><video controls src="./src/demo2.mp4" muted="false"></video></div>
