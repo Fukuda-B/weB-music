@@ -14,5 +14,3 @@ Web Audio API で波形を作り，再生する．
 デモ2 Custom (音が出ます)
 
 <div><video controls src="https://github.com/Fukuda-B/weB-music/assets/60131202/11147082-0c74-46b0-8a80-2dd7e8d1ccb9" muted="false"></video></div>
-
-デモのために少しタイピングの練習をしました．
