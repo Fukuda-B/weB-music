@@ -1,7 +1,7 @@
 # weB-music
 ブラウザで動作するシンセ的な何かを作りたかった
 
-<a href="https://fukuda-b.github.io/weB-music/"><img src="./src/img1.jpg"></a>
+<a href="https://fukuda-b.github.io/weB-music/"><img style="display: block; margin: auto;" src="./src/img1.jpg"></a>
 
 Web Audio API で波形を作り，再生する．
 基準周波数A4は440Hz，他の音は $440 \times 2^{\frac{x}{12}}$ で計算している（平均律）．
