@@ -2,6 +2,8 @@
 // https://sleepygamersmemo.blogspot.com/2020/02/virtual-piano-memo.html
 
 /*
+    https://www.w3.org/TR/uievents-code/#table-key-code-alphanumeric-writing-system
+
     keyMap1のキー配置に近いもの: https://mike3.net/piano/1-piano.html
     keyMap2のキー配置に近いもの: https://onlinepiano.app/ja/#, https://onlinepiano1.com/ja/
     keyMap3のキー配置に近いもの (未実装): http://gakusyu.jp/musictheory/kenban.php?timbre=piano
@@ -88,6 +90,7 @@ let keyMap2 = {
     'Digit0': ['Eb', 5, '0'],
     'KeyP'  : ['E' , 5, 'P'],
     'BracketRight': ['F', 5, '['],
+    // 'Equal': ['Gb', 5, '='],
     'IntlYen': ['A', 5, '￥']
 }
 
