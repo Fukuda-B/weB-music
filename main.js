@@ -123,7 +123,7 @@ const sound = function (key, oct) {
 
     let frequency = 440*Math.pow(2,((keyArr.indexOf(key)-9)/12)+(oct-4));
     oscillator.frequency.value = frequency;
-    console.log(freq_type.value+' '+frequency+'Hz');
+    // console.log(freq_type.value+' '+frequency+'Hz');
     tone_info.innerText = freq_type.value+' '+key+oct+' '+parseFloat(frequency).toFixed(2)+'Hz'
     document.getElementById('k_'+key+oct).classList.add('pressed');
 
