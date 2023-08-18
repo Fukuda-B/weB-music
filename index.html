@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>weB-music</title>
     <style>
+        #wrap {
+            display: flex;
+            justify-content: center;
+        }
         #ctrl_1, #ctrl_2, #ctrl_2_2 {
             height: 330px;
             width: 200px;
-            float: left;
-            display: block;
             border: 1px solid #BBB;
             padding: 3px 10px;
         }
@@ -18,68 +20,120 @@
             width: 280px;
         }
         #ctrl_3 {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #ctrl_3 button {
+            padding: 10px 15px;
+        }
+        #tone_info {
+            text-align: center;
+        }
+        #keyboard {
+            display: flex;
+            justify-content: center;
+        }
+        .key {
+            border: 1px solid #bbb;
+            border-bottom: solid 5px #bbb;
+            position: relative;
+        }
+        .wk {
+            background-color: #fff;
+            height: 100px;
+            width: 30px;
+            z-index: 1;
+            color: #111;
+        }
+        .bk {
+            background-color: #111;
+            height: 60px;
+            width: 20px;
+            z-index: 2;
+            margin-left: -10px;
+            margin-right: -10px;
+            color: #FFF;
+        }
+        .pressed {
+            border: solid 1px red;
+            border-bottom: solid 5px red;
+        }
+        .klabel {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.5em;
+            text-align: center;
             display: block;
-            clear: both;
+        }
+        #notice {
+            border: solid 1px #bbb;
+            padding: 10px;
+            width: 700px;
+            margin-top: 50px;
+            margin-left: calc(50% - 350px);
         }
     </style>
 </head>
 <body>
-    <h3>weB-music</h3>
-    <div id="ctrl_1">
-        <select id="freq_type">
-            <option value="sine">Sine</option>
-            <option value="square">Square</option>
-            <option value="sawtooth">Sawtooth</option>
-            <option value="triangle">Triangle</option>
-            <option value="custom">Custom</option>
-        </select>
+    <h3 style="text-align: center;">weB-music</h3>
+    <div id="wrap">
+        <div id="ctrl_1">
+            <select id="freq_type">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="sawtooth">Sawtooth</option>
+                <option value="triangle">Triangle</option>
+                <option value="custom">Custom</option>
+            </select>
 
-        <p><input type="range" id="volume" min="0" max="100" step="1" value="30">
-            Volume: <span id="current_volume"></span></p>
-        <p><input type="range" id="tone_attack" min="1" max="2000" step="1" value="5">
-            Attack: <span id="current_tone_attack"></span>ms</p>
-        <p><input type="range" id="tone_hold" min="1" max="2000" step="1" value="5">
-            Hold: <span id="current_tone_hold"></span>ms</p>
-        <p><input type="range" id="tone_decay" min="1" max="2000" step="1" value="30">
-            Decay: <span id="current_tone_decay"></span>ms</p>
-        <p><input type="range" id="tone_sustain" min="0" max="100" step="1" value="80">
-            Sustain: <span id="current_tone_sustain"></span></p>
-        <p><input type="range" id="tone_release" min="1" max="2000" step="1" value="200">
-            Release: <span id="current_tone_release"></span>ms</p>
-    </div>
-    <div id="ctrl_2">
-        <p style="margin: 0;">Real</p>
-        <p><input type="range" id="real1" min="0" max="1" step="0.01" value="0">
-            1: <span id="current_real1"></span></p>
-        <p><input type="range" id="real2" min="0" max="1" step="0.01" value="0">
-            2: <span id="current_real2"></span></p>
-        <p><input type="range" id="real3" min="0" max="1" step="0.01" value="0">
-            3: <span id="current_real3"></span></p>
-        <p><input type="range" id="real4" min="0" max="1" step="0.01" value="0">
-            4: <span id="current_real4"></span></p>
-        <p><input type="range" id="real5" min="0" max="1" step="0.01" value="0">
-            5: <span id="current_real5"></span></p>
-        <p><input type="range" id="real6" min="0" max="1" step="0.01" value="0">
-            6: <span id="current_real6"></span></p>
-        <p><input type="range" id="real7" min="0" max="1" step="0.01" value="0">
-            7: <span id="current_real7"></span></p>
-    </div>
-    <div id="ctrl_2_2">
-        <p style="margin: 0;">Imag</p>
-        <p><input type="range" id="imag1" min="0" max="1" step="0.01" value="0">
-            1: <span id="current_imag1"></span></p>
-        <p><input type="range" id="imag2" min="0" max="1" step="0.01" value="0">
-            2: <span id="current_imag2"></span></p>
-        <p><input type="range" id="imag3" min="0" max="1" step="0.01" value="0">
-            3: <span id="current_imag3"></span></p>
-        <p><input type="range" id="imag4" min="0" max="1" step="0.01" value="0">
-            4: <span id="current_imag4"></span></p>
-        <p><input type="range" id="imag5" min="0" max="1" step="0.01" value="0">
-            5: <span id="current_imag5"></span></p>
-        <p><input type="range" id="imag6" min="0" max="1" step="0.01" value="0">
-            6: <span id="current_imag6"></span></p>
-        <p><input type="range" id="imag7" min="0" max="1" step="0.01" value="0">
-            7: <span id="current_imag7"></span></p>
+            <p><input type="range" id="volume" min="0" max="100" step="1" value="30">
+                Volume: <span id="current_volume"></span></p>
+            <p><input type="range" id="tone_attack" min="1" max="2000" step="1" value="5">
+                Attack: <span id="current_tone_attack"></span>ms</p>
+            <p><input type="range" id="tone_hold" min="1" max="2000" step="1" value="5">
+                Hold: <span id="current_tone_hold"></span>ms</p>
+            <p><input type="range" id="tone_decay" min="1" max="2000" step="1" value="30">
+                Decay: <span id="current_tone_decay"></span>ms</p>
+            <p><input type="range" id="tone_sustain" min="0" max="100" step="1" value="80">
+                Sustain: <span id="current_tone_sustain"></span></p>
+            <p><input type="range" id="tone_release" min="1" max="2000" step="1" value="200">
+                Release: <span id="current_tone_release"></span>ms</p>
+        </div>
+        <div id="ctrl_2">
+            <p style="margin: 0;">Real</p>
+            <p><input type="range" id="real1" min="0" max="1" step="0.01" value="0">
+                1: <span id="current_real1"></span></p>
+            <p><input type="range" id="real2" min="0" max="1" step="0.01" value="0">
+                2: <span id="current_real2"></span></p>
+            <p><input type="range" id="real3" min="0" max="1" step="0.01" value="0">
+                3: <span id="current_real3"></span></p>
+            <p><input type="range" id="real4" min="0" max="1" step="0.01" value="0">
+                4: <span id="current_real4"></span></p>
+            <p><input type="range" id="real5" min="0" max="1" step="0.01" value="0">
+                5: <span id="current_real5"></span></p>
+            <p><input type="range" id="real6" min="0" max="1" step="0.01" value="0">
+                6: <span id="current_real6"></span></p>
+            <p><input type="range" id="real7" min="0" max="1" step="0.01" value="0">
+                7: <span id="current_real7"></span></p>
+        </div>
+        <div id="ctrl_2_2">
+            <p style="margin: 0;">Imag</p>
+            <p><input type="range" id="imag1" min="0" max="1" step="0.01" value="0">
+                1: <span id="current_imag1"></span></p>
+            <p><input type="range" id="imag2" min="0" max="1" step="0.01" value="0">
+                2: <span id="current_imag2"></span></p>
+            <p><input type="range" id="imag3" min="0" max="1" step="0.01" value="0">
+                3: <span id="current_imag3"></span></p>
+            <p><input type="range" id="imag4" min="0" max="1" step="0.01" value="0">
+                4: <span id="current_imag4"></span></p>
+            <p><input type="range" id="imag5" min="0" max="1" step="0.01" value="0">
+                5: <span id="current_imag5"></span></p>
+            <p><input type="range" id="imag6" min="0" max="1" step="0.01" value="0">
+                6: <span id="current_imag6"></span></p>
+            <p><input type="range" id="imag7" min="0" max="1" step="0.01" value="0">
+                7: <span id="current_imag7"></span></p>
+        </div>
     </div>
     <div id="ctrl_3">
         <button type="button" id="pre1">Preset1</button>
@@ -92,13 +146,63 @@
             <option value="keymap2" selected>Keymap2</option>
             <!-- <option value="keymap3">Keymap3</option> -->
         </select>
-
-        <p>
-            注意点<br>
-            音の数×Volume>100 で音割れするので，音量(Volume)は小さめのほうがいいかもしれません．<br>
-            Releaseを0にすると，クリックノイズの原因になるため最小を1msにしています (Decayも同様)．<br>
-        </p>
     </div>
+    <h4 id="tone_info">-</h4>
+    <div id="keyboard">
+        <div class="wk key" id="k_F2"><span class="klabel" id="l_F2"></span></div>
+        <div class="bk key" id="k_Gb2"><span class="klabel" id="l_Gb2"></span></div>
+        <div class="wk key" id="k_G2"><span class="klabel" id="l_G2"></span></div>
+        <div class="bk key" id="k_Ab2"><span class="klabel" id="l_Ab2"></span></div>
+        <div class="wk key" id="k_A2"><span class="klabel" id="l_A2"></span></div>
+        <div class="bk key" id="k_Bb2"><span class="klabel" id="l_Bb2"></span></div>
+        <div class="wk key" id="k_B2"><span class="klabel" id="l_B2"></span></div>
+
+        <div class="wk key" id="k_C3"><span class="klabel" id="l_C3"></span></div>
+        <div class="bk key" id="k_Db3"><span class="klabel" id="l_Db3"></span></div>
+        <div class="wk key" id="k_D3"><span class="klabel" id="l_D3"></span></div>
+        <div class="bk key" id="k_Eb3"><span class="klabel" id="l_Eb3"></span></div>
+        <div class="wk key" id="k_E3"><span class="klabel" id="l_E3"></span></div>
+        <div class="wk key" id="k_F3"><span class="klabel" id="l_F3"></span></div>
+        <div class="bk key" id="k_Gb3"><span class="klabel" id="l_Gb3"></span></div>
+        <div class="wk key" id="k_G3"><span class="klabel" id="l_G3"></span></div>
+        <div class="bk key" id="k_Ab3"><span class="klabel" id="l_Ab3"></span></div>
+        <div class="wk key" id="k_A3"><span class="klabel" id="l_A3"></span></div>
+        <div class="bk key" id="k_Bb3"><span class="klabel" id="l_Bb3"></span></div>
+        <div class="wk key" id="k_B3"><span class="klabel" id="l_B3"></span></div>
+
+        <div class="wk key" id="k_C4"><span class="klabel" id="l_C4"></span></div>
+        <div class="bk key" id="k_Db4"><span class="klabel" id="l_Db4"></span></div>
+        <div class="wk key" id="k_D4"><span class="klabel" id="l_D4"></span></div>
+        <div class="bk key" id="k_Eb4"><span class="klabel" id="l_Eb4"></span></div>
+        <div class="wk key" id="k_E4"><span class="klabel" id="l_E4"></span></div>
+        <div class="wk key" id="k_F4"><span class="klabel" id="l_F4"></span></div>
+        <div class="bk key" id="k_Gb4"><span class="klabel" id="l_Gb4"></span></div>
+        <div class="wk key" id="k_G4"><span class="klabel" id="l_G4"></span></div>
+        <div class="bk key" id="k_Ab4"><span class="klabel" id="l_Ab4"></span></div>
+        <div class="wk key" id="k_A4"><span class="klabel" id="l_A4"></span></div>
+        <div class="bk key" id="k_Bb4"><span class="klabel" id="l_Bb4"></span></div>
+        <div class="wk key" id="k_B4"><span class="klabel" id="l_B4"></span></div>
+
+        <div class="wk key" id="k_C5"><span class="klabel" id="l_C5"></span></div>
+        <div class="bk key" id="k_Db5"><span class="klabel" id="l_Db5"></span></div>
+        <div class="wk key" id="k_D5"><span class="klabel" id="l_D5"></span></div>
+        <div class="bk key" id="k_Eb5"><span class="klabel" id="l_Eb5"></span></div>
+        <div class="wk key" id="k_E5"><span class="klabel" id="l_E5"></span></div>
+        <div class="wk key" id="k_F5"><span class="klabel" id="l_F5"></span></div>
+        <div class="bk key" id="k_Gb5"><span class="klabel" id="l_Gb5"></span></div>
+        <div class="wk key" id="k_G5"><span class="klabel" id="l_G5"></span></div>
+        <div class="bk key" id="k_Ab5"><span class="klabel" id="l_Ab5"></span></div>
+        <div class="wk key" id="k_A5"><span class="klabel" id="l_A5"></span></div>
+        <div class="bk key" id="k_Bb5"><span class="klabel" id="l_Bb5"></span></div>
+        <div class="wk key" id="k_B5"><span class="klabel" id="l_B5"></span></div>
+
+    </div>
+
+    <p id="notice">
+        注意点<br>
+        音の数×Volume>100 で音割れするため，音量(Volume)は小さめのほうがいいかもしれません<br>
+        Releaseを0にすると，クリックノイズの原因になるため最小を1msにしています (Decayも同様)<br>
+    </p>
 </body>
 <script src="main.js"></script>
 </html>
