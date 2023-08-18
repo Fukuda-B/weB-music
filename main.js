@@ -101,12 +101,24 @@ const tone_sustain = document.getElementById('tone_sustain');
 const tone_release = document.getElementById('tone_release');
 let audioContext = null;
 const key_map = document.getElementById('key_map');
-let keyMap = keyMap1;
+let keyMap = keyMap2;
+const custom_ax = 7;
 
 const sound = function (key, oct) {
     let oscillator = audioContext.createOscillator();
 
-    oscillator.type = freq_type.value;
+    if (freq_type.value==='custom') {
+        const realArr = new Float32Array(custom_ax+1);
+        const imagArr = new Float32Array(custom_ax+1);
+        for(let i=1; i<=custom_ax; i++) {
+            realArr[i] = document.getElementById('real'+i).value;
+            imagArr[i] = document.getElementById('imag'+i).value;
+        }
+        const customWave = audioContext.createPeriodicWave(realArr, imagArr);
+        oscillator.setPeriodicWave(customWave);
+    } else {
+        oscillator.type = freq_type.value;
+    }
 
     let frequency = 440*Math.pow(2,((keyArr.indexOf(key)-9)/12)+(oct-4));
     oscillator.frequency.value = frequency;
@@ -140,24 +152,18 @@ window.addEventListener('load', () => {
 });
 
 volume.addEventListener('input', () => {
-    document.getElementById('current_volume').innerText = volume.value;
-});
+    document.getElementById('current_volume').innerText = volume.value;});
 tone_attack.addEventListener('input', () => {
-    document.getElementById('current_tone_attack').innerText = tone_attack.value;
-});
+    document.getElementById('current_tone_attack').innerText = tone_attack.value;});
 tone_hold.addEventListener('input', () => {
-    document.getElementById('current_tone_hold').innerText = tone_hold.value;
-});
+    document.getElementById('current_tone_hold').innerText = tone_hold.value;});
 tone_decay.addEventListener('input', () => {
-    document.getElementById('current_tone_decay').innerText = tone_decay.value;
-});
+    document.getElementById('current_tone_decay').innerText = tone_decay.value;});
 tone_sustain.addEventListener('input', () => {
-    document.getElementById('current_tone_sustain').innerText = tone_sustain.value;
-});
+    document.getElementById('current_tone_sustain').innerText = tone_sustain.value;});
 tone_release.addEventListener('input', () => {
-    document.getElementById('current_tone_release').innerText = tone_release.value;
-});
-key_map.addEventListener('change', (e) => {
+    document.getElementById('current_tone_release').innerText = tone_release.value;});
+key_map.addEventListener('change', () => {
     if (key_map.value==='keymap3') {
         keyMap = keyMap3;
     } else if (key_map.value==='keymap2') {
@@ -165,7 +171,15 @@ key_map.addEventListener('change', (e) => {
     } else {
         keyMap = keyMap1;
     }
-})
+});
+for (let i=1; i<=custom_ax; i++) {
+    let rElem = document.getElementById('real'+i);
+    let iElem = document.getElementById('imag'+i);
+    rElem.addEventListener('input', () => {
+        document.getElementById('current_real'+i).innerText = parseFloat(rElem.value).toFixed(2);});
+    iElem.addEventListener('input', () => {
+        document.getElementById('current_imag'+i).innerText = parseFloat(iElem.value).toFixed(2);});
+}
 
 const updateValue = () => {
     document.getElementById('current_volume').innerText = volume.value;
@@ -174,36 +188,54 @@ const updateValue = () => {
     document.getElementById('current_tone_decay').innerText = tone_decay.value;
     document.getElementById('current_tone_sustain').innerText = tone_sustain.value;
     document.getElementById('current_tone_release').innerText = tone_release.value;
+    for (let i=1; i<=custom_ax; i++) {
+        document.getElementById('current_real'+i).innerText = parseFloat(document.getElementById('real'+i).value).toFixed(2);
+        document.getElementById('current_imag'+i).innerText = parseFloat(document.getElementById('imag'+i).value).toFixed(2);
+    }
 }
 
 document.getElementById('pre1').addEventListener('click', () => {
-    freq_type.value = 'sine';
+    freq_type.value = 'triangle';
     volume.value = 30;
     tone_attack.value = 5;
     tone_hold.value = 5;
     tone_decay.value = 30;
     tone_sustain.value = 80;
     tone_release.value = 200;
+    for (let i=1; i<=custom_ax; i++) {
+        document.getElementById('real'+i).value = 0.0;
+        document.getElementById('imag'+i).value = 0.0;
+    }
     updateValue();
 });
 document.getElementById('pre2').addEventListener('click', () => {
     freq_type.value = 'square';
-    volume.value = 10;
+    volume.value = 12;
     tone_attack.value = 1;
     tone_hold.value = 5;
     tone_decay.value = 40;
-    tone_sustain.value = 20;
-    tone_release.value = 1;
+    tone_sustain.value = 100;
+    tone_release.value = 50;
+    for (let i=1; i<=custom_ax; i++) {
+        document.getElementById('real'+i).value = 0.0;
+        document.getElementById('imag'+i).value = 0.0;
+    }
     updateValue();
 });
 document.getElementById('pre3').addEventListener('click', () => {
-    freq_type.value = 'triangle';
-    volume.value = 30;
-    tone_attack.value = 200;
+    freq_type.value = 'custom';
+    volume.value = 25;
+    tone_attack.value = 10;
     tone_hold.value = 1;
-    tone_decay.value = 300;
-    tone_sustain.value = 100;
-    tone_release.value = 460;
+    tone_decay.value = 30;
+    tone_sustain.value = 80;
+    tone_release.value = 110;
+    let rArr = [0.03, 0.21, 0.0, 0.0, 0.0, 0.0, 0.0];
+    let iArr = [1.0, 0.03, 0.48, 0.05, 0.11, 0.15, 0.23];
+    for (let i=1; i<=custom_ax; i++) {
+        document.getElementById('real'+i).value = rArr[i-1];
+        document.getElementById('imag'+i).value = iArr[i-1];
+    }
     updateValue();
 });
 
