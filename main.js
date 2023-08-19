@@ -108,6 +108,12 @@ let keyMap = keyMap2;
 const custom_ax = 7;
 const tone_info = document.getElementById('tone_info');
 
+const waveform_canvas = document.getElementById('waveform');
+const waveform_ctx = waveform_canvas.getContext('2d');
+const waveform_size = [744, 100];
+let analyser = null;
+let buf = new Float32Array(waveform_size[0]);
+
 const sound = function (key, oct) {
     let oscillator = audioContext.createOscillator();
     oscillator.setPeriodicWave = oscillator.setPeriodicWave || oscillator.setWaveTable;
@@ -134,7 +140,6 @@ const sound = function (key, oct) {
     document.getElementById('k_'+key+oct).classList.add('pressed');
 
     let gainNode = audioContext.createGain();
-
     gainNode.gain.setValueAtTime(0.0, audioContext.currentTime);
     gainNode.gain.setTargetAtTime(volume.value/100, audioContext.currentTime, tone_attack.value/1000);
     gainNode.gain.setTargetAtTime(
@@ -143,8 +148,7 @@ const sound = function (key, oct) {
         (tone_decay.value/1000)
     );
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    oscillator.connect(gainNode).connect(analyser).connect(audioContext.destination);
     oscillator.start();
 
     return {
@@ -215,6 +219,34 @@ const updateKeyMap = () => {
         document.getElementById('l_'+keyMap[key][0]+keyMap[key][1]).innerHTML += '<br>'+keyMap[key][2];
     }
 }
+const updateWaveform = () => {
+    if (analyser===null) return;
+    analyser.getFloatTimeDomainData(buf);
+    waveform_ctx.fillStyle = "#fff";
+    waveform_ctx.fillRect(0,0,waveform_size[0],waveform_size[1]);
+
+    waveform_ctx.lineWidth = 1;
+    waveform_ctx.strokeStyle = '#BBB';
+    waveform_ctx.beginPath();
+    waveform_ctx.setLineDash([]);
+    waveform_ctx.moveTo(0,waveform_size[1]/2);
+    waveform_ctx.lineTo(waveform_size[0],waveform_size[1]/2);
+    waveform_ctx.stroke();
+
+    waveform_ctx.beginPath();
+    waveform_ctx.setLineDash([5,5]);
+    waveform_ctx.moveTo(0,waveform_size[1]/4);
+    waveform_ctx.lineTo(waveform_size[0],waveform_size[1]/4);
+    waveform_ctx.moveTo(0,waveform_size[1]*3/4);
+    waveform_ctx.lineTo(waveform_size[0],waveform_size[1]*3/4);
+    waveform_ctx.stroke();
+    for (let i=0; i<waveform_size[0]; i++) {
+        let b = waveform_size[1]/2-buf[i]*waveform_size[1]/2;
+        waveform_ctx.fillStyle = "#222";
+        waveform_ctx.fillRect(i,b,1,2);
+    }
+}
+setInterval(updateWaveform, 1000/10);
 
 document.getElementById('pre1').addEventListener('click', () => {
     freq_type.value = 'triangle';
@@ -264,6 +296,7 @@ document.getElementById('pre3').addEventListener('click', () => {
 document.addEventListener('keydown', function keyUp(e) {
     if (audioContext === null) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
     }
     if (e.repeat) {return;}
     if (e.code in keyMap) {

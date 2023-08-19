@@ -34,6 +34,13 @@
         #ctrl_3 button {
             padding: 10px 15px;
         }
+        #waveform_wrap {
+            display: flex;
+            justify-content: center;
+        }
+        #waveform {
+            border: 1px solid #BBB;
+        }
         #tone_info {
             text-align: center;
         }
@@ -42,10 +49,11 @@
             justify-content: center;
         }
         .key {
-            border: 1px solid #bbb;
-            border-bottom: solid 4px #bbb;
+            border: 1px solid #BBB;
+            border-bottom: solid 4px #BBB;
             position: relative;
             border-radius: 2px;
+            user-select: none;
         }
         .wk {
             background-color: #fff;
@@ -79,7 +87,7 @@
             display: block;
         }
         #notice {
-            border: solid 1px #bbb;
+            border: solid 1px #BBB;
             padding: 10px;
             width: 700px;
             margin-top: 50px;
@@ -88,7 +96,7 @@
     </style>
 </head>
 <body>
-    <h3 style="text-align: center;">weB-music</h3>
+    <!-- <h3 style="text-align: center;">weB-music</h3> -->
     <div id="wrap">
         <div id="ctrl_1">
             <select id="freq_type">
@@ -146,6 +154,9 @@
             <p><input type="range" id="imag7" min="0" max="1" step="0.01" value="0">
                 7: <span id="current_imag7"></span></p>
         </div>
+    </div>
+    <div id="waveform_wrap">
+        <canvas id="waveform" width="744px" height="100px"></canvas>
     </div>
     <div id="ctrl_3">
         <button type="button" id="pre1">Preset1</button>
