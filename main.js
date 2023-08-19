@@ -106,7 +106,6 @@ let audioContext = null;
 const key_map = document.getElementById('key_map');
 let keyMap = keyMap2;
 const custom_ax = 7;
-const tone_info = document.getElementById('tone_info');
 
 const waveform_canvas = document.getElementById('waveform');
 const waveform_ctx = waveform_canvas.getContext('2d');
@@ -136,7 +135,6 @@ const sound = function (key, oct) {
     let frequency = 440*Math.pow(2,((keyArr.indexOf(key)-9)/12)+(oct-4));
     oscillator.frequency.value = frequency;
     // console.log(freq_type.value+' '+frequency+'Hz');
-    tone_info.innerText = freq_type.value+' '+key+oct+' '+parseFloat(frequency).toFixed(2)+'Hz'
     document.getElementById('k_'+key+oct).classList.add('pressed');
 
     let gainNode = audioContext.createGain();
@@ -308,7 +306,6 @@ document.addEventListener('keydown', function keyUp(e) {
                 tone.oscillator.stop(tone.audioContext.currentTime + (tone_release.value/1000));
                 removeEventListener('keyup', keyUp);
 
-                tone_info.innerText = '-';
                 document.getElementById('k_'+tone.key+tone.oct).classList.remove('pressed');
             }
         })
