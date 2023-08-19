@@ -110,6 +110,9 @@ const tone_info = document.getElementById('tone_info');
 
 const sound = function (key, oct) {
     let oscillator = audioContext.createOscillator();
+    oscillator.setPeriodicWave = oscillator.setPeriodicWave || oscillator.setWaveTable;
+    oscillator.stop = oscillator.stop || oscillator.noteOff;
+    oscillator.start = oscillator.start || oscillator.noteOn;
 
     if (freq_type.value==='custom') {
         const realArr = new Float32Array(custom_ax+1);
@@ -142,7 +145,6 @@ const sound = function (key, oct) {
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-    oscillator.start = oscillator.start || oscillator.noteOn;
     oscillator.start();
 
     return {
