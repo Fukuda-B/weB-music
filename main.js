@@ -128,6 +128,8 @@ const depth = document.getElementById('depth');
 const rate = document.getElementById('rate');
 const level = document.getElementById('level');
 
+MAX_TIME_HOLD = 20*1000; // ms
+
 const sound = function (key, oct) {
     let oscillator = audioContext.createOscillator();
     oscillator.setPeriodicWave = oscillator.setPeriodicWave || oscillator.setWaveTable;
@@ -217,6 +219,17 @@ const sound = function (key, oct) {
         oscillator: oscillator,
         key: key,
         oct: oct,
+        lfo: lfo,
+        mod: [
+            gainNode,
+            depthGain,
+            delayCh,
+            mixGain,
+            delayDe,
+            feedbackGain,
+            dryGain,
+            wetGain,
+        ]
     }
 }
 
@@ -439,6 +452,17 @@ document.addEventListener('keydown', function keyUp(e) {
                 tone.gainNode.gain.setValueAtTime(tone.gainNode.gain.value, tone.audioContext.currentTime);
                 tone.gainNode.gain.linearRampToValueAtTime(0.0, tone.audioContext.currentTime + (tone_release.value/1000));
                 tone.oscillator.stop(tone.audioContext.currentTime + (tone_release.value/1000));
+                setTimeout(() => {
+                    tone.oscillator.disconnect();
+                    tone.oscillator = null;
+                    tone.lfo.stop(tone.audioContext.currentTime + (tone_release.value/1000));
+                    tone.lfo.disconnect();
+                    tone.lfo = null;
+                    for(let i=0; i<tone.mod.length; i++) {
+                        tone.mod[i].disconnect();
+                        tone.mod[i] = null;
+                    }
+                }, MAX_TIME_HOLD);
                 removeEventListener('keyup', keyUp);
 
                 document.getElementById('k_'+tone.key+tone.oct).classList.remove('pressed');
