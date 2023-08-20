@@ -276,8 +276,6 @@ const updateKeyMap = () => {
     }
 }
 const updateWaveform = () => {
-    if (analyser===null) return;
-    analyser.getFloatTimeDomainData(buf);
     waveform_ctx.fillStyle = "#fff";
     waveform_ctx.fillRect(0,0,waveform_size[0],waveform_size[1]);
 
@@ -296,6 +294,9 @@ const updateWaveform = () => {
     waveform_ctx.moveTo(0,waveform_size[1]*3/4);
     waveform_ctx.lineTo(waveform_size[0],waveform_size[1]*3/4);
     waveform_ctx.stroke();
+
+    if (analyser===null) return;
+    analyser.getFloatTimeDomainData(buf);
     for (let i=0; i<waveform_size[0]; i++) {
         let b = waveform_size[1]/2-buf[i]*waveform_size[1]/2;
         waveform_ctx.fillStyle = "#222";
