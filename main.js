@@ -1,5 +1,8 @@
 // https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API
+// https://weblike-curtaincall.ssl-lolipop.jp/portfolio-web-sounder/webaudioapi-effectors/delay-reverb
+// https://www.g200kg.com/jp/docs/webaudio/index.html
 // https://sleepygamersmemo.blogspot.com/2020/02/virtual-piano-memo.html
+// https://tomhazledine.com/web-audio-delay/
 
 /*
     https://www.w3.org/TR/uievents-code/#table-key-code-alphanumeric-writing-system
@@ -113,11 +116,42 @@ const waveform_size = [744, 100];
 let analyser = null;
 let buf = new Float32Array(waveform_size[0]);
 
+// Delay
+const dry = document.getElementById('dry');
+const wet = document.getElementById('wet');
+const feedback = document.getElementById('feedback');
+const delay_delay = document.getElementById('delay_delay');
+
+// Chorus
+const chorus_delay = document.getElementById('chorus_delay');
+const depth = document.getElementById('depth');
+const rate = document.getElementById('rate');
+const level = document.getElementById('level');
+
 const sound = function (key, oct) {
     let oscillator = audioContext.createOscillator();
     oscillator.setPeriodicWave = oscillator.setPeriodicWave || oscillator.setWaveTable;
     oscillator.stop = oscillator.stop || oscillator.noteOff;
     oscillator.start = oscillator.start || oscillator.noteOn;
+
+    // Delay
+    let delayDe = audioContext.createDelay(2);
+    let wetGain = audioContext.createGain();
+    let feedbackGain = audioContext.createGain();
+    delayDe.delayTime.value = delay_delay.value;
+    wetGain.gain.value = wet.value;
+    feedbackGain.gain.value = feedback.value;
+
+    // Chorus
+    let delayCh = audioContext.createDelay(1);
+    let lfo = audioContext.createOscillator();
+    let depthGain = audioContext.createGain();
+    let mixGain = audioContext.createGain();
+    lfo.frequency.value = rate.value;
+    lfo.type = 'sine';
+    delayCh.delayTime.value = chorus_delay.value/1000;
+    depthGain.gain.value = delayCh.delayTime.value*depth.value;
+    mixGain.gain.value = level.value;
 
     if (freq_type.value==='custom') {
         const realArr = new Float32Array(custom_ax+1);
@@ -146,7 +180,31 @@ const sound = function (key, oct) {
         (tone_decay.value/1000)
     );
 
-    oscillator.connect(gainNode).connect(analyser).connect(audioContext.destination);
+    // メイン
+    oscillator.connect(gainNode);
+    gainNode.connect(analyser);
+
+    // Chorus
+    lfo.connect(depthGain);
+    depthGain.connect(delayCh.delayTime);
+    gainNode.connect(delayCh);
+    delayCh.connect(mixGain);
+    mixGain.connect(analyser);
+
+    // Delayの出力
+    // wet側にはoscillatorから直接つなぐとプツプツするノイズで大変なことになるので，メイン出力を入れる
+    gainNode.connect(delayDe);
+    delayDe.connect(wetGain);
+    wetGain.connect(analyser);
+
+    // Delayのフィードバック
+    delayDe.connect(feedbackGain);
+    feedbackGain.connect(delayDe);
+
+    // Analyser --> 出力
+    analyser.connect(audioContext.destination);
+
+    lfo.start();
     oscillator.start();
 
     return {

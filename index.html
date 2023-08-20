@@ -5,123 +5,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>weB-music</title>
-    <style>
-        #wrap {
-            display: flex;
-            justify-content: center;
-        }
-        #ctrl_1, #ctrl_2, #ctrl_2_2 {
-            height: 280px;
-            width: 200px;
-            border: 1px solid #BBB;
-            padding: 3px 10px;
-        }
-        #ctrl_1 p, #ctrl_2 p, #ctrl_2_2 p {
-            margin: 10px 0;
-            height: 25px;
-        }
-        input[type='range'] {
-            width: 128px;
-            height: 16px;
-        }
-        #ctrl_1 {
-            width: 280px;
-        }
-        #ctrl_3 {
-            margin-top: 20px;
-            text-align: center;
-        }
-        #ctrl_3 button {
-            padding: 10px 15px;
-        }
-        #waveform_wrap {
-            display: flex;
-            justify-content: center;
-        }
-        #waveform {
-            border: 1px solid #BBB;
-        }
-        #tone_info {
-            text-align: center;
-        }
-        #keyboard {
-            display: flex;
-            justify-content: center;
-        }
-        .key {
-            border: 1px solid #BBB;
-            border-bottom: solid 4px #BBB;
-            position: relative;
-            border-radius: 2px;
-            user-select: none;
-        }
-        .wk {
-            background-color: #fff;
-            height: 100px;
-            width: 30px;
-            z-index: 1;
-            color: #111;
-        }
-        .bk {
-            background-color: #111;
-            height: 60px;
-            width: 20px;
-            z-index: 2;
-            margin-left: -11px;
-            margin-right: -11px;
-            color: #FFF;
-        }
-        #k_C3, #k_C4, #k_C5 {
-            font-weight: bold;
-            color: darkred;
-        }
-        .pressed {
-            border-bottom: solid 4px red;
-        }
-        .klabel {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            font-size: 0.5em;
-            text-align: center;
-            display: block;
-        }
-        #notice {
-            border: solid 1px #BBB;
-            padding: 10px;
-            width: 700px;
-            margin-top: 50px;
-            margin-left: calc(50% - 350px);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h3 style="text-align: center; margin: 4px 0; color: #BBB; font-weight: 400;">weB-music</h3>
     <div id="wrap">
         <div id="ctrl_1">
-            <select id="freq_type">
-                <option value="sine">Sine</option>
-                <option value="square">Square</option>
-                <option value="sawtooth">Sawtooth</option>
-                <option value="triangle">Triangle</option>
-                <option value="custom">Custom</option>
-            </select>
+            <div id="oscillator">
+                <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -4px;">Oscillator</p>
+                <select id="freq_type">
+                    <option value="sine">Sine</option>
+                    <option value="square" selected>Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="custom">Custom</option>
+                </select>
+    
+                <p><input type="range" id="volume" min="0" max="100" step="1" value="20">
+                    Volume: <span id="current_volume"></span></p>
+                <p><input type="range" id="tone_attack" min="1" max="2000" step="1" value="5">
+                    Attack: <span id="current_tone_attack"></span>ms</p>
+                <p><input type="range" id="tone_hold" min="1" max="2000" step="0" value="5">
+                    Hold: <span id="current_tone_hold"></span>ms</p>
+                <p><input type="range" id="tone_decay" min="1" max="2000" step="1" value="30">
+                    Decay: <span id="current_tone_decay"></span>ms</p>
+                <p><input type="range" id="tone_sustain" min="0" max="100" step="1" value="80">
+                    Sustain: <span id="current_tone_sustain"></span></p>
+                <p><input type="range" id="tone_release" min="1" max="2000" step="1" value="200">
+                    Release: <span id="current_tone_release"></span>ms</p>
+            </div>
 
-            <p><input type="range" id="volume" min="0" max="100" step="1" value="30">
-                Volume: <span id="current_volume"></span></p>
-            <p><input type="range" id="tone_attack" min="1" max="2000" step="1" value="5">
-                Attack: <span id="current_tone_attack"></span>ms</p>
-            <p><input type="range" id="tone_hold" min="1" max="2000" step="0" value="5">
-                Hold: <span id="current_tone_hold"></span>ms</p>
-            <p><input type="range" id="tone_decay" min="1" max="2000" step="1" value="30">
-                Decay: <span id="current_tone_decay"></span>ms</p>
-            <p><input type="range" id="tone_sustain" min="0" max="100" step="1" value="80">
-                Sustain: <span id="current_tone_sustain"></span></p>
-            <p><input type="range" id="tone_release" min="1" max="2000" step="1" value="200">
-                Release: <span id="current_tone_release"></span>ms</p>
+            <div id="delay_effect">
+                <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Delay</p>
+                <p><input type="range" id="delay_delay" min="0" max="2" step="0.01" value="0.15">
+                    Delay: <span id="current_delay_delay"></span>ms</p>
+                <p><input type="range" id="dry" min="0" max="1" step="0.01" value="1.0">
+                    Dry: <span id="current_dry"></span></p>
+                <p><input type="range" id="wet" min="0" max="1" step="0.01" value="0.3">
+                    Wet: <span id="current_wet"></span></p>
+                <p><input type="range" id="feedback" min="0" max="1" step="0.01" value="0.1">
+                    Feedback: <span id="current_feedback"></span></p>
+            </div>
+
+            <div id="chorus_effect">
+                <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Chorus</p>
+                <p><input type="range" id="chorus_delay" min="0" max="100" step="1" value="30">
+                    Delay: <span id="current_chorus_delay"></span>ms</p>
+                <p><input type="range" id="depth" min="0" max="1" step="0.01" value="0.06">
+                    Depth: <span id="current_depth"></span></p>
+                <p><input type="range" id="rate" min="0" max="1" step="0.01" value="0.44">
+                    Rate: <span id="current_rate"></span>Hz</p>
+                <p><input type="range" id="level" min="0" max="1" step="0.01" value="0.2">
+                    Level: <span id="current_level"></span></p>
+            </div>
         </div>
         <div id="ctrl_2">
-            <p style="margin: 0;">Real</p>
+            <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Real</p>
             <p><input type="range" id="real1" min="0" max="1" step="0.01" value="0">
                 1: <span id="current_real1"></span></p>
             <p><input type="range" id="real2" min="0" max="1" step="0.01" value="0">
@@ -138,7 +77,7 @@
                 7: <span id="current_real7"></span></p>
         </div>
         <div id="ctrl_2_2">
-            <p style="margin: 0;">Imag</p>
+            <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Imag</p>
             <p><input type="range" id="imag1" min="0" max="1" step="0.01" value="0">
                 1: <span id="current_imag1"></span></p>
             <p><input type="range" id="imag2" min="0" max="1" step="0.01" value="0">
