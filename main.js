@@ -134,14 +134,6 @@ const sound = function (key, oct) {
     oscillator.stop = oscillator.stop || oscillator.noteOff;
     oscillator.start = oscillator.start || oscillator.noteOn;
 
-    // Delay
-    let delayDe = audioContext.createDelay(2);
-    let wetGain = audioContext.createGain();
-    let feedbackGain = audioContext.createGain();
-    delayDe.delayTime.value = delay_delay.value;
-    wetGain.gain.value = wet.value;
-    feedbackGain.gain.value = feedback.value;
-
     // Chorus
     let delayCh = audioContext.createDelay(1);
     let lfo = audioContext.createOscillator();
@@ -152,6 +144,16 @@ const sound = function (key, oct) {
     delayCh.delayTime.value = chorus_delay.value/1000;
     depthGain.gain.value = delayCh.delayTime.value*depth.value;
     mixGain.gain.value = level.value;
+
+    // Delay
+    let delayDe = audioContext.createDelay(2);
+    let dryGain = audioContext.createGain();
+    let wetGain = audioContext.createGain();
+    let feedbackGain = audioContext.createGain();
+    delayDe.delayTime.value = delay_delay.value/1000;
+    dryGain.gain.value = dry.value;
+    wetGain.gain.value = wet.value;
+    feedbackGain.gain.value = feedback.value;
 
     if (freq_type.value==='custom') {
         const realArr = new Float32Array(custom_ax+1);
@@ -182,26 +184,28 @@ const sound = function (key, oct) {
 
     // メイン
     oscillator.connect(gainNode);
-    gainNode.connect(analyser);
 
     // Chorus
     lfo.connect(depthGain);
     depthGain.connect(delayCh.delayTime);
     gainNode.connect(delayCh);
     delayCh.connect(mixGain);
-    mixGain.connect(analyser);
 
-    // Delayの出力
-    // wet側にはoscillatorから直接つなぐとプツプツするノイズで大変なことになるので，メイン出力を入れる
+    // Delay
+    // wet側にはoscillatorから直接つなぐとプツプツするノイズで大変なことになるので注意
+    mixGain.connect(delayDe);
     gainNode.connect(delayDe);
+    mixGain.connect(dryGain);
+    gainNode.connect(dryGain);
     delayDe.connect(wetGain);
-    wetGain.connect(analyser);
 
     // Delayのフィードバック
     delayDe.connect(feedbackGain);
     feedbackGain.connect(delayDe);
 
     // Analyser --> 出力
+    dryGain.connect(analyser);
+    wetGain.connect(analyser);
     analyser.connect(audioContext.destination);
 
     lfo.start();
@@ -221,6 +225,8 @@ window.addEventListener('load', () => {
     updateValue();
     updateKeyMap();
 });
+
+// 値変更イベント
 volume.addEventListener('input', () => {
     document.getElementById('current_volume').innerText = volume.value;});
 tone_attack.addEventListener('input', () => {
@@ -332,50 +338,91 @@ const updateWaveform = () => {
 }
 setInterval(updateWaveform, 1000/10);
 
-document.getElementById('pre1').addEventListener('click', () => {
-    freq_type.value = 'triangle';
-    volume.value = 30;
-    tone_attack.value = 5;
-    tone_hold.value = 5;
-    tone_decay.value = 30;
-    tone_sustain.value = 80;
-    tone_release.value = 200;
-    for (let i=1; i<=custom_ax; i++) {
-        document.getElementById('real'+i).value = 0.0;
-        document.getElementById('imag'+i).value = 0.0;
+// Preset関係
+let presets = {
+    1: {
+        'type': 'triangle',
+        'volume': 30,
+        'tone_attack': 5,
+        'tone_hold': 5,
+        'tone_decay': 30,
+        'tone_sustain': 80,
+        'tone_release': 200,
+        'rArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+        'iArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+    },
+    2: {
+        'type': 'sawtooth',
+        'volume': 18,
+        'tone_attack': 1,
+        'tone_hold': 5,
+        'tone_decay': 40,
+        'tone_sustain': 100,
+        'tone_release': 50,
+        'rArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+        'iArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+    },
+    3: {
+        'type': 'custom',
+        'volume': 25,
+        'tone_attack': 10,
+        'tone_hold': 1,
+        'tone_decay': 30,
+        'tone_sustain': 80,
+        'tone_release': 110,
+        'rArr': [0.03, 0.21, 0.0, 0.0, 0.0, 0.0, 0.0],
+        'iArr': [1.0, 0.03, 0.48, 0.05, 0.11, 0.15, 0.23],
+    },
+    4: {
+        'type': 'square',
+        'volume': 27,
+        'tone_attack': 1,
+        'tone_hold': 5,
+        'tone_decay': 10,
+        'tone_sustain': 35,
+        'tone_release': 80,
+        'rArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+        'iArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+    },
+    5: {
+        'type': 'custom',
+        'volume': 30,
+        'tone_attack': 3,
+        'tone_hold':30,
+        'tone_decay': 30,
+        'tone_sustain': 75,
+        'tone_release': 250,
+        'rArr': [0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0],
+        'iArr': [1.0, 0.0 ,0.0 ,0.75 ,0.10 ,0.05 ,0.50],
+    },
+}
+for (let i=1; i<=3; i++) {
+    document.getElementById('pre'+i).addEventListener('click', () => {
+        updatePreset(i);
+    });
+}
+const updatePreset = (i) => {
+    let pv = presets[i]
+    freq_type.value = pv['type'];
+    volume.value = pv['volume'];
+    tone_attack.value = pv['tone_attack'];
+    tone_hold.value = pv['tone_hold'];
+    tone_decay.value = pv['tone_decay'];
+    tone_sustain.value = pv['tone_sustain'];
+    tone_release.value = pv['tone_release'];
+    for (let j=1; j<=custom_ax; j++) {
+        document.getElementById('real'+j).value = pv['rArr'][j-1];
+        document.getElementById('imag'+j).value = pv['iArr'][j-1];
     }
     updateValue();
-});
-document.getElementById('pre2').addEventListener('click', () => {
-    freq_type.value = 'sawtooth';
-    volume.value = 18;
-    tone_attack.value = 1;
-    tone_hold.value = 5;
-    tone_decay.value = 40;
-    tone_sustain.value = 100;
-    tone_release.value = 50;
-    for (let i=1; i<=custom_ax; i++) {
-        document.getElementById('real'+i).value = 0.0;
-        document.getElementById('imag'+i).value = 0.0;
-    }
-    updateValue();
-});
-document.getElementById('pre3').addEventListener('click', () => {
-    freq_type.value = 'custom';
-    volume.value = 25;
-    tone_attack.value = 10;
-    tone_hold.value = 1;
-    tone_decay.value = 30;
-    tone_sustain.value = 80;
-    tone_release.value = 110;
-    let rArr = [0.03, 0.21, 0.0, 0.0, 0.0, 0.0, 0.0];
-    let iArr = [1.0, 0.03, 0.48, 0.05, 0.11, 0.15, 0.23];
-    for (let i=1; i<=custom_ax; i++) {
-        document.getElementById('real'+i).value = rArr[i-1];
-        document.getElementById('imag'+i).value = iArr[i-1];
-    }
-    updateValue();
-});
+}
+keyMapPreset = {
+    'Numpad1': 1,
+    'Numpad2': 2,
+    'Numpad3': 3,
+    'Numpad4': 4,
+    'Numpad5': 5,
+}
 
 document.addEventListener('keydown', function keyUp(e) {
     if (audioContext === null) {
@@ -383,6 +430,8 @@ document.addEventListener('keydown', function keyUp(e) {
         analyser = audioContext.createAnalyser();
     }
     if (e.repeat) {return;}
+
+    // 演奏用キー
     if (e.code in keyMap) {
         let tone = sound(keyMap[e.code][0], keyMap[e.code][1])
         document.addEventListener('keyup', (re) => {
@@ -395,5 +444,8 @@ document.addEventListener('keydown', function keyUp(e) {
                 document.getElementById('k_'+tone.key+tone.oct).classList.remove('pressed');
             }
         })
+    // Preset変更キー
+    } else if (e.code in keyMapPreset) {
+        updatePreset(keyMapPreset[e.code]);
     }
 })

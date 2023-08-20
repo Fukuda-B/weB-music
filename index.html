@@ -35,28 +35,28 @@
                     Release: <span id="current_tone_release"></span>ms</p>
             </div>
 
-            <div id="delay_effect">
-                <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Delay</p>
-                <p><input type="range" id="delay_delay" min="0" max="2" step="0.01" value="0.15">
-                    Delay: <span id="current_delay_delay"></span>ms</p>
-                <p><input type="range" id="dry" min="0" max="1" step="0.01" value="1.0">
-                    Dry: <span id="current_dry"></span></p>
-                <p><input type="range" id="wet" min="0" max="1" step="0.01" value="0.3">
-                    Wet: <span id="current_wet"></span></p>
-                <p><input type="range" id="feedback" min="0" max="1" step="0.01" value="0.1">
-                    Feedback: <span id="current_feedback"></span></p>
-            </div>
-
             <div id="chorus_effect">
                 <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Chorus</p>
                 <p><input type="range" id="chorus_delay" min="0" max="100" step="1" value="30">
                     Delay: <span id="current_chorus_delay"></span>ms</p>
-                <p><input type="range" id="depth" min="0" max="1" step="0.01" value="0.06">
+                <p><input type="range" id="depth" min="0" max="1" step="0.01" value="0.15">
                     Depth: <span id="current_depth"></span></p>
-                <p><input type="range" id="rate" min="0" max="1" step="0.01" value="0.44">
+                <p><input type="range" id="rate" min="0" max="1" step="0.01" value="0.42">
                     Rate: <span id="current_rate"></span>Hz</p>
                 <p><input type="range" id="level" min="0" max="1" step="0.01" value="0.2">
                     Level: <span id="current_level"></span></p>
+            </div>
+
+            <div id="delay_effect">
+                <p style="margin: 0; font-size: 0.8em; padding-left: 3px; margin-bottom: -8px;">Delay</p>
+                <p><input type="range" id="delay_delay" min="0" max="2000" step="1" value="90">
+                    Delay: <span id="current_delay_delay"></span>ms</p>
+                <p><input type="range" id="dry" min="0" max="1" step="0.01" value="1.0">
+                    Dry: <span id="current_dry"></span></p>
+                <p><input type="range" id="wet" min="0" max="1" step="0.01" value="0.35">
+                    Wet: <span id="current_wet"></span></p>
+                <p><input type="range" id="feedback" min="0" max="1" step="0.01" value="0.15">
+                    Feedback: <span id="current_feedback"></span></p>
             </div>
         </div>
         <div id="ctrl_2">
@@ -160,9 +160,10 @@
     </div>
 
     <p id="notice">
-        注意点<br>
+        おしらせ<br>
         音の数×Volume>100 で音割れするため，音量(Volume)は小さめのほうがいいかもしれません<br>
         Releaseを0にすると，クリックノイズの原因になるため最小を1msにしています (Decayも同様)<br>
+        NumpadでPresetの切り替えができます<br>
     </p>
 </body>
 <script src="main.js"></script>
