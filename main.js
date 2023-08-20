@@ -233,6 +233,25 @@ tone_sustain.addEventListener('input', () => {
     document.getElementById('current_tone_sustain').innerText = tone_sustain.value;});
 tone_release.addEventListener('input', () => {
     document.getElementById('current_tone_release').innerText = tone_release.value;});
+
+delay_delay.addEventListener('input', () => {
+    document.getElementById('current_delay_delay').innerText = delay_delay.value;});
+dry.addEventListener('input', () => {
+    document.getElementById('current_dry').innerText = dry.value;});
+wet.addEventListener('input', () => {
+    document.getElementById('current_wet').innerText = wet.value;});
+feedback.addEventListener('input', () => {
+    document.getElementById('current_feedback').innerText = feedback.value;});
+
+chorus_delay.addEventListener('input', () => {
+    document.getElementById('current_chorus_delay').innerText = chorus_delay.value;});
+depth.addEventListener('input', () => {
+    document.getElementById('current_depth').innerText = depth.value;});
+rate.addEventListener('input', () => {
+    document.getElementById('current_rate').innerText = rate.value;});
+level.addEventListener('input', () => {
+    document.getElementById('current_level').innerText = level.value;});
+
 key_map.addEventListener('change', () => {
     if (key_map.value==='keymap3') {
         keyMap = keyMap3;
@@ -261,6 +280,14 @@ const updateValue = () => {
     document.getElementById('current_tone_decay').innerText = tone_decay.value;
     document.getElementById('current_tone_sustain').innerText = tone_sustain.value;
     document.getElementById('current_tone_release').innerText = tone_release.value;
+    document.getElementById('current_delay_delay').innerText = delay_delay.value;
+    document.getElementById('current_dry').innerText = dry.value;
+    document.getElementById('current_wet').innerText = wet.value;
+    document.getElementById('current_feedback').innerText = feedback.value;
+    document.getElementById('current_chorus_delay').innerText = chorus_delay.value;
+    document.getElementById('current_depth').innerText = depth.value;
+    document.getElementById('current_rate').innerText = rate.value;
+    document.getElementById('current_level').innerText = level.value;
     for (let i=1; i<=custom_ax; i++) {
         document.getElementById('current_real'+i).innerText = parseFloat(document.getElementById('real'+i).value).toFixed(2);
         document.getElementById('current_imag'+i).innerText = parseFloat(document.getElementById('imag'+i).value).toFixed(2);
