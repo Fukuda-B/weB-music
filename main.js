@@ -446,23 +446,24 @@ document.addEventListener('keydown', function keyUp(e) {
 
     // 演奏用キー
     if (e.code in keyMap) {
-        let tone = sound(keyMap[e.code][0], keyMap[e.code][1])
+        let tone = sound(keyMap[e.code][0], keyMap[e.code][1]);
         document.addEventListener('keyup', (re) => {
             if (e.code === re.code) {
-                tone.gainNode.gain.setValueAtTime(tone.gainNode.gain.value, tone.audioContext.currentTime);
-                tone.gainNode.gain.linearRampToValueAtTime(0.0, tone.audioContext.currentTime + (tone_release.value/1000));
-                tone.oscillator.stop(tone.audioContext.currentTime + (tone_release.value/1000));
-                setTimeout(() => {
-                    tone.oscillator.disconnect();
-                    tone.oscillator = null;
-                    tone.lfo.stop(tone.audioContext.currentTime + (tone_release.value/1000));
-                    tone.lfo.disconnect();
-                    tone.lfo = null;
-                    for(let i=0; i<tone.mod.length; i++) {
-                        tone.mod[i].disconnect();
-                        tone.mod[i] = null;
-                    }
-                }, MAX_TIME_HOLD);
+                try {
+                    tone.gainNode.gain.setValueAtTime(tone.gainNode.gain.value, tone.audioContext.currentTime);
+                    tone.gainNode.gain.linearRampToValueAtTime(0.0, tone.audioContext.currentTime + (tone_release.value/1000));
+                    tone.oscillator.stop(tone.audioContext.currentTime + (tone_release.value/1000));
+                    setTimeout(() => {
+                        tone.oscillator = null;
+                        tone.lfo.stop(tone.audioContext.currentTime + (tone_release.value/1000));
+                        tone.lfo.disconnect();
+                        tone.lfo = null;
+                        for(let i=0; i<tone.mod.length; i++) {
+                            tone.mod[i].disconnect();
+                            tone.mod[i] = null;
+                        }
+                    }, MAX_TIME_HOLD);
+                } catch (e) { console.log(e); }
                 removeEventListener('keyup', keyUp);
 
                 document.getElementById('k_'+tone.key+tone.oct).classList.remove('pressed');
